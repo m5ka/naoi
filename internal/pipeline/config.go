@@ -43,7 +43,7 @@ func Parse(raw []byte) (*Config, error) {
 	if err := yaml.Unmarshal(raw, &config); err != nil {
 		return nil, err
 	}
-	for key, _ := range config.Jobs {
+	for key := range config.Jobs {
 		if strings.HasPrefix(key, ".") {
 			delete(config.Jobs, key)
 		}
