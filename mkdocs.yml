@@ -1,0 +1,4 @@
+site_name: naoi
+nav:
+  - home: index.md
+theme: readthedocs
