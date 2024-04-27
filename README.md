@@ -4,6 +4,7 @@
     <source media="(prefers-color-scheme: light)" srcset=".github/images/naoi.svg">
     <img alt="naoi" src=".github/images/naoi.svg" width="326">
 </picture>
+
 <strong>naoi</strong> is a lightweight self-hosted ci/cd platform.
 
 [![ci status][ci-img]][ci] [![contributors][contrib-img]][contrib] [![coverage][cov-img]][cov]
