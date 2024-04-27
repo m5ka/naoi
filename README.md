@@ -1,4 +1,4 @@
-<p align="center">
+<div align="center">
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/images/naoi_dark.svg">
     <source media="(prefers-color-scheme: light)" srcset=".github/images/naoi.svg">
@@ -8,7 +8,7 @@
 <strong>naoi</strong> is a lightweight self-hosted ci/cd platform.
 
 [![ci status][ci-img]][ci] [![contributors][contrib-img]][contrib] [![coverage][cov-img]][cov]
-</p>
+</div>
 
 [ci-img]: https://img.shields.io/github/actions/workflow/status/m5ka/naoi/test.yaml?label=tests
 [ci]: actions/workflows/test.yaml
