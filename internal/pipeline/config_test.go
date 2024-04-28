@@ -24,7 +24,7 @@ variables:
   MY_VARIABLE: 123
 
 default:
-  image: ubuntu@latest
+  image: ubuntu:latest
   before_script:
     - echo "This is before."
   variables:
@@ -131,7 +131,7 @@ when:
 steps: [build]
 
 .dot: &dot
-  image: ubuntu@latest
+  image: ubuntu:latest
 
 build:
   <<: *dot
@@ -150,7 +150,7 @@ func TestParse(t *testing.T) {
 	assert.Contains(t, config.When, TriggerConfig{Event: "manual"})
 	assert.Equal(t, []string{"build", "release"}, config.Steps)
 	assert.Equal(t, map[string]string{"MY_VARIABLE": "123"}, config.Variables)
-	assert.Equal(t, "ubuntu@latest", config.Default.Image)
+	assert.Equal(t, "ubuntu:latest", config.Default.Image)
 	assert.Equal(t, []string{"echo \"This is before.\""}, config.Default.BeforeScript)
 	assert.Equal(t, map[string]string{"MY_OTHER_VARIABLE": "456"}, config.Default.Variables)
 	assert.Contains(t, config.Jobs, "build")
@@ -184,7 +184,7 @@ func TestDotJob(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Contains(t, config.Jobs, "build")
 	assert.NotContains(t, config.Jobs, ".dot")
-	assert.Equal(t, "ubuntu@latest", config.Jobs["build"].Image)
+	assert.Equal(t, "ubuntu:latest", config.Jobs["build"].Image)
 }
 
 func TestValidate(t *testing.T) {
