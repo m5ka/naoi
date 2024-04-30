@@ -9,3 +9,4 @@ vendor/
 go.work
 .idea/
 cover.out
+/*.go
