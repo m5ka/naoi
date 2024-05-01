@@ -3,7 +3,6 @@ package runner
 import (
 	"context"
 	"github.com/docker/docker/client"
-	_ "github.com/joho/godotenv/autoload"
 	"go.m5ka.dev/naoi/internal/pipeline"
 	"os"
 )
