@@ -66,7 +66,7 @@ func (c *Container) Start(ctx context.Context) error {
 	return nil
 }
 
-func (c *Container) Exec(ctx context.Context, cmd []string, env map[string]string) (int, error) {
+func (c *Container) Exec(ctx context.Context, cmd string, env map[string]string) (int, error) {
 	if !c.started {
 		if err := c.Start(ctx); err != nil {
 			return 0, err
@@ -79,7 +79,7 @@ func (c *Container) Exec(ctx context.Context, cmd []string, env map[string]strin
 	}
 
 	exec, err := c.client.ContainerExecCreate(ctx, c.id, types.ExecConfig{
-		Cmd:          cmd,
+		Cmd:          []string{"/bin/bash", "-c", cmd},
 		Env:          envList,
 		Tty:          c.isTerminal,
 		AttachStdout: true,
