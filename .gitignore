@@ -10,3 +10,5 @@ go.work
 .idea/
 cover.out
 /*.go
+naoi.yml
+naoi.yaml

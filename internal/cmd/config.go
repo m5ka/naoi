@@ -9,12 +9,12 @@ import (
 
 var prettyPrint bool
 
-var checkConfigCommand = &cobra.Command{
+var checkConfigCmd = &cobra.Command{
 	Use:   "check FILE",
 	Short: "parses a pipeline configuration file to ensure it's valid",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
-			fmt.Fprint(os.Stderr, "naoi check requires a single FILE parameter\n")
+			fmt.Fprintln(os.Stderr, "naoi check requires a single FILE parameter")
 			os.Exit(1)
 		}
 		content, err := os.ReadFile(args[0])
@@ -24,7 +24,7 @@ var checkConfigCommand = &cobra.Command{
 		}
 		config, err := pipeline.Parse(content)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "could not parse the config file %s\n%s\n", args[0], err.Error())
+			fmt.Fprintf(os.Stderr, "could not parse the config file %s:\n%s\n", args[0], err.Error())
 			os.Exit(1)
 		}
 		if err := config.Validate(); err != nil {
@@ -38,6 +38,6 @@ var checkConfigCommand = &cobra.Command{
 }
 
 func init() {
-	checkConfigCommand.Flags().BoolVarP(&prettyPrint, "print", "p", false, "pretty print parsed configuration")
-	rootCmd.AddCommand(checkConfigCommand)
+	checkConfigCmd.Flags().BoolVarP(&prettyPrint, "print", "p", false, "pretty print parsed configuration")
+	rootCmd.AddCommand(checkConfigCmd)
 }

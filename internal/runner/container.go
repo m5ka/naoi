@@ -25,15 +25,19 @@ type Container struct {
 	started    bool
 	isTerminal bool
 	client     *client.Client
+	job        *pipeline.JobConfig
+	jobName    string
 }
 
-func (r *Runner) Create(ctx context.Context, j *pipeline.JobConfig) (*Container, error) {
+func (r *Runner) Create(ctx context.Context, job *pipeline.JobConfig, jobName string) (*Container, error) {
 	c := &Container{
 		name:       fmt.Sprintf("naoi_%s", shortuuid.New()),
-		image:      resolveImage(j.Image),
+		image:      resolveImage(job.Image),
 		started:    false,
 		isTerminal: term.IsTerminal(os.Stdout.Fd()),
 		client:     r.Client,
+		job:        job,
+		jobName:    jobName,
 	}
 
 	if err := c.pullImage(ctx); err != nil {
@@ -42,8 +46,7 @@ func (r *Runner) Create(ctx context.Context, j *pipeline.JobConfig) (*Container,
 
 	resp, err := c.client.ContainerCreate(ctx, &container.Config{
 		Image: c.image,
-		Tty:   c.isTerminal,
-		Cmd:   []string{"/bin/bash"},
+		Cmd:   []string{"tail", "-f", "/dev/null"},
 	}, nil, nil, nil, c.name)
 	if err != nil {
 		return nil, err
@@ -63,24 +66,20 @@ func (c *Container) Start(ctx context.Context) error {
 	time.Sleep(2 * time.Second)
 
 	c.started = true
+	fmt.Printf(">>> JOB=%s CONTAINER=%s CID=%s IMAGE=%s\n", c.jobName, c.name, c.id, c.image)
 	return nil
 }
 
-func (c *Container) Exec(ctx context.Context, cmd string, env map[string]string) (int, error) {
+func (c *Container) Exec(ctx context.Context, cmd string, env []string) (int, error) {
 	if !c.started {
 		if err := c.Start(ctx); err != nil {
 			return 0, err
 		}
 	}
 
-	envList := make([]string, 0)
-	for key, value := range env {
-		envList = append(envList, fmt.Sprintf("%s=%s", key, value))
-	}
-
 	exec, err := c.client.ContainerExecCreate(ctx, c.id, types.ExecConfig{
 		Cmd:          []string{"/bin/bash", "-c", cmd},
-		Env:          envList,
+		Env:          env,
 		Tty:          c.isTerminal,
 		AttachStdout: true,
 		AttachStderr: true,
@@ -101,6 +100,7 @@ func (c *Container) Exec(ctx context.Context, cmd string, env map[string]string)
 }
 
 func (c *Container) Close(ctx context.Context) error {
+	fmt.Println("<<<")
 	return c.client.ContainerRemove(ctx, c.id, container.RemoveOptions{
 		RemoveVolumes: true,
 		Force:         true,
