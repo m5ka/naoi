@@ -1,9 +1,11 @@
 """Contains classes to encode specific exceptions that can be raised by naoi."""
 
+
 class CacheError(RuntimeError):
     """Raised when the cache encounters a runtime error."""
 
     pass
+
 
 class PipelineValidationError(ValueError):
     """Raised when a validation error occurs during parsing of a naoi config file."""

@@ -142,7 +142,9 @@ class Pipeline(BaseModel):
     trigger_context: dict[str, VariableType] = Field(init=False, default={})
 
     @classmethod
-    def from_yaml(cls, stream: bytes | str | TextIO, identifier: str | None = None) -> "Pipeline":
+    def from_yaml(
+        cls, stream: bytes | str | TextIO, identifier: str | None = None
+    ) -> "Pipeline":
         """
         Returns a Pipeline object containing the configuration specified by the given
         YAML.
@@ -182,7 +184,9 @@ class Pipeline(BaseModel):
         """
         try:
             with open(filename, "r") as file:
-                return Pipeline.from_yaml(file, identifier=identifier or str(filename.absolute()))
+                return Pipeline.from_yaml(
+                    file, identifier=identifier or str(filename.absolute())
+                )
         except FileNotFoundError:
             raise PipelineParseError("Pipeline configuration file does not exist.")
 
