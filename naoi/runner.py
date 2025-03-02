@@ -36,7 +36,7 @@ def _require_container(
         def ___require_container(self, *args, **kwargs):
             if self._container is None:
                 raise error_class(error_message or "No container is active in Runner.")
-            return func(*args, **kwargs)
+            return func(self, *args, **kwargs)
 
         return ___require_container
 
@@ -50,7 +50,7 @@ def _require_job(
         def ___require_job(self, *args, **kwargs):
             if self._job is None:
                 raise error_class(error_message or "No job is active in Runner.")
-            return func(*args, **kwargs)
+            return func(self, *args, **kwargs)
 
         return ___require_job
 
